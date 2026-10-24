@@ -317,17 +317,20 @@ def p05():
     defs, photo = image_slot(c, "m", "images/05-arnold-collage.jpg", 0, 300, 1880, 3342,
                              {"right": 420, "bottom": 760, "top": 160}, align="xMidYMin")
     cx, cw = 1990, W - M - 1990
-    out = [t("Inter700", cx, 560, "FIG. 05 — ANATOMY", 40, c["accent"], ls=14)]
-    muscles = [("DELTOID", "shoulder abduction"), ("BICEPS BRACHII", "elbow flexion"),
-               ("LATISSIMUS DORSI", "shoulder extension"), ("EXTERNAL OBLIQUE", "trunk rotation"),
-               ("GLUTEUS MAXIMUS", "hip extension"), ("QUADRICEPS FEMORIS", "knee extension"),
-               ("GASTROCNEMIUS", "plantar flexion")]
+    out = [t("Inter700", cx, 560, "THE 7 RULES OF FORM", 40, c["accent"], ls=14)]
+    rules = [("BRACE FIRST", "Core tight before every rep."), ("FULL RANGE", "Own every inch of it."),
+             ("SLOW THE NEGATIVE", "Two to three seconds down."), ("BREATHE", "Exhale through the hard part."),
+             ("CHECK YOUR EGO", "Technique first, load second."), ("PROGRESS SLOWLY", "Add a little, every week."),
+             ("RECOVER HARD", "Sleep is part of the program.")]
+    tw = cw - 150
+    ns = min(48, min((tw - 4 * len(n)) / text_w("Inter700", n, 1) for n, _ in rules))
+    ls_ = min(50, min(tw / text_w("PlayfairItalic", l, 1) for _, l in rules))
     y = 720
-    for i, (name, action) in enumerate(muscles, 1):
+    for i, (name, line) in enumerate(rules, 1):
         out.append(f'<line x1="{cx}" y1="{y - 100}" x2="{cx + cw}" y2="{y - 100}" stroke="{c["ink"]}" stroke-width="2" opacity="0.18"/>')
         out.append(t("Anton", cx, y + 30, f"{i:02d}", 96, c["accent"]))
-        out.append(t("Inter700", cx + 150, y - 8, name, 48, c["ink"], ls=4))
-        out.append(t("PlayfairItalic", cx + 150, y + 62, action, 50, c["muted"]))
+        out.append(t("Inter700", cx + 150, y - 8, name, ns, c["ink"], ls=4))
+        out.append(t("PlayfairItalic", cx + 150, y + 62, line, ls_, c["muted"]))
         y += 330
     head = "FORM OVER COMFORT."
     hs = fit("Anton", [head], W - 2 * M, 420)
