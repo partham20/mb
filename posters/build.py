@@ -313,9 +313,10 @@ def p04():
 
 def p05():
     c = THEMES["dark"]
-    defs, photo = image_slot(c, "m", "images/05-arnold.jpg", 0, 300, 2050, 3000,
-                             {"right": 520, "bottom": 420, "top": 200})
-    cx, cw = 1960, W - M - 1960
+    # tall Arnold collage, shown uncropped down the left; anatomy index beside it
+    defs, photo = image_slot(c, "m", "images/05-arnold-collage.jpg", 0, 300, 1880, 3342,
+                             {"right": 420, "bottom": 760, "top": 160}, align="xMidYMin")
+    cx, cw = 1990, W - M - 1990
     out = [t("Inter700", cx, 560, "FIG. 05 — ANATOMY", 40, c["accent"], ls=14)]
     muscles = [("DELTOID", "shoulder abduction"), ("BICEPS BRACHII", "elbow flexion"),
                ("LATISSIMUS DORSI", "shoulder extension"), ("EXTERNAL OBLIQUE", "trunk rotation"),
