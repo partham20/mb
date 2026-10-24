@@ -19,6 +19,7 @@ GOLD, INK, BLACK, CREAM = "#c8963e", "#ece6da", "#0e0d0c", "#ebe4d6"
 _fonts = {k: TTFont(str(FONTS / f)) for k, f in {
     "Anton": "anton-latin-400-normal.woff2",
     "Inter700": "inter-latin-700-normal.woff2",
+    "Playfair": "playfair-display-latin-400-normal.woff2",
 }.items()}
 
 
@@ -151,6 +152,29 @@ def stacked(bg, line1, line2, sym, tag):
     return svg(w, h, body, bg)
 
 
+def instagram_handle(text_color):
+    """Instagram glyph + handle in Playfair Display, for posters, slides and video end cards."""
+    icon, size = 170, 128
+    tx = icon + 50
+    w = int(tx + text_width("Playfair", "@docbeyondthebarbell", size) + 20)
+    h = 220
+    iy = (h - icon) / 2
+    # baseline so the lowercase x-height sits centred on the icon
+    xh = _fonts["Playfair"]["OS/2"].sxHeight * size / _fonts["Playfair"]["head"].unitsPerEm
+    base = h / 2 + xh / 2
+    s = icon / 100  # glyph drawn on a 100 x 100 grid
+    glyph = (f'<defs><radialGradient id="ig" cx="0.3" cy="1.07" r="1.5">'
+             '<stop offset="0" stop-color="#fdf497"/><stop offset="0.05" stop-color="#fdf497"/>'
+             '<stop offset="0.45" stop-color="#fd5949"/><stop offset="0.6" stop-color="#d6249f"/>'
+             '<stop offset="0.9" stop-color="#285aeb"/></radialGradient></defs>'
+             f'<g id="instagram-icon" transform="translate(0 {iy:.1f}) scale({s:.4f})">'
+             '<rect width="100" height="100" rx="24" fill="url(#ig)"/>'
+             '<rect x="19" y="19" width="62" height="62" rx="18" fill="none" stroke="#fff" stroke-width="7.5"/>'
+             '<circle cx="50" cy="50" r="15" fill="none" stroke="#fff" stroke-width="7.5"/>'
+             '<circle cx="69.5" cy="30.5" r="4.6" fill="#fff"/></g>')
+    return svg(w, h, glyph + text_path("Playfair", "@docbeyondthebarbell", size, tx, base, text_color))
+
+
 LOGOS = {
     "profile-picture": profile(BLACK, GOLD, GOLD),
     "badge-dark": badge(BLACK, GOLD, GOLD, INK, GOLD),
@@ -163,6 +187,9 @@ LOGOS = {
     "stacked-light": stacked(CREAM, BLACK, "#a8402b", BLACK, "#6f675c"),
     "mark-gold-transparent": svg(900, 500, mark(450, 250, 800, GOLD)),
     "mark-black-transparent": svg(900, 500, mark(450, 250, 800, BLACK)),
+    "instagram-handle-black": instagram_handle("#000000"),
+    "instagram-handle-white": instagram_handle("#ffffff"),
+    "instagram-handle-gold": instagram_handle(GOLD),
 }
 
 if __name__ == "__main__":
