@@ -205,12 +205,20 @@ def split_poster(num, theme, image, side, lines, accent_idx, eyebrow, quote, aut
 
 
 def p01():
-    return split_poster(1, "light", "images/01-tyson.jpg", "right",
+    return split_poster(1, "dark", "images/01-goggins.jpg", "left",
+                        ["THEY", "DON’T", "KNOW", "ME,", "SON."], {4}, "ON SELF-BELIEF",
+                        None, "DAVID GOGGINS", img_top=0)
+
+
+def p02():
+    return split_poster(2, "light", "images/02-tyson.jpg", "right",
                         ["DO IT", "LIKE YOU", "LOVE IT."], {2}, "ON DISCIPLINE",
                         "Discipline is doing what you hate to do, but doing it like you love it.", "MIKE TYSON")
 
 
-def p02():
+
+
+def p03():
     """No photo: ECG trace that turns into a barbell, plus three evidence lines."""
     c = THEMES["dark"]
     a = c["accent"]
@@ -246,23 +254,69 @@ def p02():
             yy += 76
         out.append(t("Inter500", M + 220, yy + 6, src, 36, c["muted"], ls=2))
         fy = yy + 200
-    return svg("dark", 2, "", f'<g id="artwork">{"".join(art)}</g><g id="type">{"".join(out)}</g>')
+    return svg("dark", 3, "", f'<g id="artwork">{"".join(art)}</g><g id="type">{"".join(out)}</g>')
 
 
 
 
-def p03():
-    return split_poster(3, "light", "images/03-goggins.jpg", "left",
-                        ["THEY", "DON’T", "KNOW", "ME,", "SON."], {4}, "ON SELF-BELIEF",
-                        None, "DAVID GOGGINS")
 
 
 def p04():
+    """Record time on top, the 1955 Sports Illustrated cover shown whole, medical-student line below."""
+    c = THEMES["light"]
+    out = [t("Inter700", M, 420, "6 MAY 1954  ·  IFFLEY ROAD, OXFORD", 46, c["accent"], ls=16)]
+    big = fit("Anton", ["3:59.4"], W - 2 * M, 1000)
+    y = 420 + 80 + cap_ratio("Anton") * big
+    out.append(t("Anton", M - 10, y, "3:59.4", big, c["ink"]))
+    out.append(t("Inter700", M, y + 130, "THE FIRST MILE EVER RUN UNDER FOUR MINUTES.", 54, c["ink"], ls=10))
+    # magazine cover, uncropped, tilted like a print pinned to the wall
+    band_top, band_bot = y + 300, 3080
+    ch = band_bot - band_top
+    cw = ch * 1135 / 1580
+    cx = W - M - cw - 40
+    href = "images/04-bannister-si-cover.jpg"
+    defs = ('<filter id="shadow" x="-10%" y="-10%" width="125%" height="125%">'
+            '<feDropShadow dx="18" dy="26" stdDeviation="26" flood-color="#000" flood-opacity="0.35"/></filter>')
+    cover = (f'<g id="photo" transform="rotate(3 {cx + cw / 2:.0f} {band_top + ch / 2:.0f})" filter="url(#shadow)">'
+             f'<rect x="{cx:.0f}" y="{band_top:.0f}" width="{cw:.0f}" height="{ch:.0f}" fill="{c["ph"]}"/>'
+             f'<image href="{href}" xlink:href="{href}" x="{cx:.0f}" y="{band_top:.0f}" width="{cw:.0f}" height="{ch:.0f}" '
+             f'preserveAspectRatio="xMidYMid slice"/></g>')
+    # left column beside the cover
+    colw = cx - 140 - M
+    lines = ["THE FIRST", "SPORTSMAN", "OF THE YEAR."]
+    hs = fit("Anton", lines, colw, 300)
+    q = "“The man who can drive himself further once the effort gets painful is the man who will win.”"
+    q_lines = wrap("PlayfairItalic", q, 66, colw)
+    block = 70 + cap_ratio("Anton") * hs + hs * 0.98 * 2 + 110 + 92 * len(q_lines) + 110
+    ly = band_top + (ch - block) / 2
+    out.append(t("Inter700", M, ly, "SPORTS ILLUSTRATED  ·  JAN 1955", 40, c["accent"], ls=14))
+    ly += 70 + cap_ratio("Anton") * hs
+    for i, line in enumerate(lines):
+        out.append(t("Anton", M - 6, ly, line, hs, c["accent"] if i == 2 else c["ink"]))
+        ly += hs * 0.98
+    ly += 110 - hs * 0.98 + 66
+    for line in q_lines:
+        out.append(t("PlayfairItalic", M, ly, line, 66, c["ink"], opacity=0.88))
+        ly += 92
+    out.append(t("Inter700", M, ly + 20, "— ROGER BANNISTER", 44, c["accent"], ls=12))
+    hs2 = fit("Anton", ["HE WAS A MEDICAL STUDENT."], W - 2 * M, 300)
+    hy = 3260 + cap_ratio("Anton") * hs2
+    out.append(t("Anton", M, hy, "HE WAS A MEDICAL STUDENT.", hs2, c["accent"]))
+    body = ("Roger Bannister trained in his lunch hour while studying medicine "
+            "— and went on to become one of Britain’s leading neurologists.")
+    by = hy + 120
+    for line in wrap("Inter500", body, 58, W - 2 * M):
+        out.append(t("Inter500", M, by, line, 58, c["ink"], opacity=0.85))
+        by += 84
+    return svg("light", 4, defs, cover + f'<g id="type">{"".join(out)}</g>')
+
+
+def p05():
     c = THEMES["dark"]
-    defs, photo = image_slot(c, "m", "images/04-arnold.jpg", 0, 300, 2050, 3000,
+    defs, photo = image_slot(c, "m", "images/05-arnold.jpg", 0, 300, 2050, 3000,
                              {"right": 520, "bottom": 420, "top": 200})
     cx, cw = 1960, W - M - 1960
-    out = [t("Inter700", cx, 560, "FIG. 04 — ANATOMY", 40, c["accent"], ls=14)]
+    out = [t("Inter700", cx, 560, "FIG. 05 — ANATOMY", 40, c["accent"], ls=14)]
     muscles = [("DELTOID", "shoulder abduction"), ("BICEPS BRACHII", "elbow flexion"),
                ("LATISSIMUS DORSI", "shoulder extension"), ("EXTERNAL OBLIQUE", "trunk rotation"),
                ("GLUTEUS MAXIMUS", "hip extension"), ("QUADRICEPS FEMORIS", "knee extension"),
@@ -280,36 +334,20 @@ def p04():
     out.append(t("Anton", M - 6, hy, "FORM OVER", hs, c["ink"]))
     out.append(t("Anton", M - 6 + text_w("Anton", "FORM OVER ", hs), hy, "COMFORT.", hs, c["accent"]))
     out.append(t("Inter500", M, hy + 130, "Train the body like a doctor would: precisely, patiently, for life.", 54, c["ink"], opacity=0.8))
-    return svg("dark", 4, defs, photo + f'<g id="type">{"".join(out)}</g>')
+    return svg("dark", 5, defs, photo + f'<g id="type">{"".join(out)}</g>')
 
 
-
-
-def p05():
-    c = THEMES["light"]
-    out = [t("Inter700", M, 420, "6 MAY 1954  ·  IFFLEY ROAD, OXFORD", 46, c["accent"], ls=16)]
-    big = fit("Anton", ["3:59.4"], W - 2 * M, 1000)
-    y = 420 + 80 + cap_ratio("Anton") * big
-    out.append(t("Anton", M - 10, y, "3:59.4", big, c["ink"]))
-    out.append(t("Inter700", M, y + 130, "THE FIRST MILE EVER RUN UNDER FOUR MINUTES.", 54, c["ink"], ls=10))
-    img_y, img_h = y + 210, 3240 - (y + 210)
-    defs, photo = image_slot(c, "m", "images/05-bannister.jpg", 0, img_y, W, img_h,
-                             {"top": 260, "bottom": 360}, align="xMidYMin")
-    hs = fit("Anton", ["HE WAS A MEDICAL STUDENT."], W - 2 * M, 300)
-    hy = 3240 + cap_ratio("Anton") * hs
-    out.append(t("Anton", M, hy, "HE WAS A MEDICAL STUDENT.", hs, c["accent"]))
-    body = ("Roger Bannister trained in his lunch hour while studying medicine "
-            "— and went on to become one of Britain’s leading neurologists.")
-    by = hy + 120
-    for line in wrap("Inter500", body, 58, W - 2 * M):
-        out.append(t("Inter500", M, by, line, 58, c["ink"], opacity=0.85))
-        by += 84
-    return svg("light", 5, defs, photo + f'<g id="type">{"".join(out)}</g>')
 
 
 
 
 def p06():
+    return split_poster(6, "light", "images/06-bruce-lee.jpg", "left",
+                        ["BE", "WATER,", "MY", "FRIEND."], {1}, "ON ADAPTING",
+                        "Empty your mind. Be formless, shapeless — like water.", "BRUCE LEE")
+
+
+def p07():
     """No photo: a prescription pad, signed."""
     c = THEMES["dark"]
     a, ink, muted = c["accent"], c["ink"], c["muted"]
@@ -350,36 +388,16 @@ def p06():
              f'<text font-family="Inter, sans-serif" font-weight="700" font-size="34" letter-spacing="7" fill="{a}">'
              f'<textPath href="#stamp-arc" xlink:href="#stamp-arc">DOC BEYOND THE BARBELL • APPROVED •</textPath></text>'
              + t("Anton", sx, scy + 40, "Rx", 110, a, anchor="middle") + '</g>')
-    return svg("dark", 6, "", f'<g id="type">{"".join(out)}</g>{stamp}')
+    return svg("dark", 7, "", f'<g id="type">{"".join(out)}</g>{stamp}')
 
 
 
 
-def p07():
-    """Full-width artwork on top, one-line headline below."""
-    c = THEMES["light"]
-    defs, photo = image_slot(c, "m", "images/07-bruce-lee.jpg", 0, 0, W, 2760,
-                             {"top": 420, "bottom": 620}, align="xMidYMin")
-    out = [t("Inter700", M, 2900, "ON ADAPTING", 44, c["accent"], ls=16)]
-    segs = [("BE ", c["ink"]), ("WATER,", c["accent"]), (" MY FRIEND.", c["ink"])]
-    hs = fit("Anton", ["".join(x for x, _ in segs)], W - 2 * M, 420)
-    hy = 2900 + 70 + cap_ratio("Anton") * hs
-    x = M - 6
-    for seg, col in segs:  # SVG drops leading/trailing spaces, so advance x past them instead
-        lead = text_w("Anton", seg[: len(seg) - len(seg.lstrip())], hs)
-        out.append(t("Anton", x + lead, hy, seg.strip(), hs, col))
-        x += text_w("Anton", seg, hs)
-    qy = hy + 160
-    for line in wrap("PlayfairItalic", "“Empty your mind. Be formless, shapeless — like water.”", 76, W - 2 * M):
-        out.append(t("PlayfairItalic", M, qy, line, 76, c["ink"], opacity=0.88))
-        qy += 104
-    out.append(t("Inter700", M, qy + 30, "— BRUCE LEE", 46, c["accent"], ls=12))
-    return svg("light", 7, defs, photo + f'<g id="type">{"".join(out)}</g>')
 
 
 POSTERS = {
-    "01-tyson": p01, "02-strength-is-medicine": p02, "03-goggins": p03, "04-form-over-comfort": p04,
-    "05-bannister": p05, "06-doctors-orders": p06, "07-bruce-lee": p07,
+    "01-goggins": p01, "02-tyson": p02, "03-strength-is-medicine": p03, "04-bannister": p04,
+    "05-form-over-comfort": p05, "06-bruce-lee": p06, "07-doctors-orders": p07,
 }
 
 if __name__ == "__main__":

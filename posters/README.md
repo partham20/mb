@@ -4,13 +4,13 @@ Seven A3 posters (297 × 420 mm), alternating light and dark.
 
 | # | File | Theme | Image |
 |---|------|-------|-------|
-| 01 | `01-tyson` | light | Mike Tyson illustration |
-| 02 | `02-strength-is-medicine` | dark | none (vector ECG → barbell artwork) |
-| 03 | `03-goggins` | light | David Goggins studio portrait |
-| 04 | `04-form-over-comfort` | dark | Arnold, scratchboard art, with anatomy index |
-| 05 | `05-bannister` | light | Roger Bannister, 6 May 1954 finish |
-| 06 | `06-doctors-orders` | dark | none (prescription pad, signed) |
-| 07 | `07-bruce-lee` | light | Bruce Lee ink drawing |
+| 01 | `01-goggins` | dark | David Goggins, sweat portrait (your reference, 4x AI-upscaled) |
+| 02 | `02-tyson` | light | Mike Tyson illustration |
+| 03 | `03-strength-is-medicine` | dark | none (vector ECG → barbell artwork) |
+| 04 | `04-bannister` | light | Sports Illustrated cover, 3 Jan 1955 |
+| 05 | `05-form-over-comfort` | dark | Arnold, scratchboard art, with anatomy index |
+| 06 | `06-bruce-lee` | light | Bruce Lee ink-splash art (your reference, 4x AI-upscaled) |
+| 07 | `07-doctors-orders` | dark | none (prescription pad, signed) |
 
 ## Files
 - `NN-name.svg` — editable source. Images are linked from `images/`, fonts are embedded.
@@ -39,13 +39,13 @@ node render.js       # export PDF + PNG (needs Playwright)
 To swap a photo, replace the file in `images/` with the same name and re-run `node render.js`.
 
 ## Image sources (all belong to their creators; for this wall only, do not sell or repost as own work)
+- Goggins: pinterest.com/pin/1051027631804979895 (left side cropped to drop the baked-in text, EDSR 4x upscale)
 - Tyson: pinterest.com/pin/1041950063808316498 (original upload, 2304×4096)
-- Goggins: i.pinimg.com/originals/4d/66/e8/4d66e8bbc7c8b5621b4aa9dd62e8a89e.webp (frame cropped)
+- Bannister: i.pinimg.com/originals/dd/d1/e5/ddd1e56f1fd2968dff5639ee852a27ea.jpg (scan edges trimmed)
 - Arnold: i.pinimg.com/originals/42/6a/4c/426a4cc15d020ec5f5ce488dcbc51a30.jpg (border cropped)
-- Bannister: i.pinimg.com/originals/15/80/1e/15801ee0cabf9e83f5a3599b2455525e.jpg
-- Bruce Lee: i.pinimg.com/originals/2f/43/95/2f43950435d1d204b0b8e3a5b9b435db.jpg
+- Bruce Lee: pinterest.com/pin/1477812374316852 (EDSR 4x upscale)
 
-## Facts on poster 02 (please have Mohan double-check before printing)
+## Facts on poster 03 (please have Mohan double-check before printing)
 1. Leong DP et al., *The Lancet*, 2015 — PURE study: grip strength vs. all-cause mortality and systolic BP.
 2. DeFronzo RA et al., *Diabetes*, 1981 — skeletal muscle takes up most insulin-stimulated glucose.
 3. Edwards JJ et al., *Br J Sports Med*, 2023 — network meta-analysis of exercise and resting BP.
