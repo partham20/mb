@@ -376,9 +376,11 @@ def p07():
         out.append(t("PlayfairItalic", W - M, oy, dose, 66, ink, anchor="end", opacity=0.85))
         oy += 245
     sy = 3700
-    out.append(t("PlayfairItalic", M, sy - 40, "Dr. Mohan Babu", 120, ink))
-    out.append(f'<line x1="{M}" y1="{sy}" x2="{M + 1050}" y2="{sy}" stroke="{ink}" stroke-width="3" opacity="0.6"/>')
-    out.append(t("Inter700", M, sy + 70, "SIGNATURE  ·  MBBS", 36, muted, ls=12))
+    name = "Dr. Mohan Chetty"
+    out.append(t("PlayfairItalic", M, sy - 40, name, 120, ink))
+    sig_w = max(1050, text_w("PlayfairItalic", name, 120) + 60)
+    out.append(f'<line x1="{M}" y1="{sy}" x2="{M + sig_w:.0f}" y2="{sy}" stroke="{ink}" stroke-width="3" opacity="0.6"/>')
+    out.append(t("Inter700", M, sy + 70, "MBBS", 36, muted, ls=12))
     # rubber stamp
     sx, scy, r = W - M - 230, 3560, 210
     stamp = (f'<g id="stamp" transform="rotate(-12 {sx} {scy})" opacity="0.85">'
@@ -395,9 +397,65 @@ def p07():
 
 
 
+def p08():
+    """Landscape A3 manifesto with Mohan's own photo, toned down behind the type."""
+    LW, LH, LM = 4200, 2970, 180
+    c = THEMES["dark"]
+    a, ink, muted = c["accent"], c["ink"], c["muted"]
+    href = "images/08-mohan.jpg"
+    px, pw = 2300, LW - 2300
+    defs = (f'<linearGradient id="lf" gradientUnits="userSpaceOnUse" x1="{px}" y1="0" x2="{px + 620}" y2="0">'
+            '<stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+            f'<linearGradient id="bf" gradientUnits="userSpaceOnUse" x1="0" y1="{LH}" x2="0" y2="{LH - 520}">'
+            '<stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+            f'<mask id="bm" maskUnits="userSpaceOnUse" x="0" y="0" width="{LW}" height="{LH}">'
+            f'<rect x="{px}" y="0" width="{pw}" height="{LH}" fill="url(#bf)"/></mask>'
+            f'<mask id="pm" maskUnits="userSpaceOnUse" x="0" y="0" width="{LW}" height="{LH}">'
+            f'<rect x="{px}" y="0" width="{pw}" height="{LH}" fill="url(#lf)" mask="url(#bm)"/></mask>'
+            '<radialGradient id="vigL" cx="50%" cy="50%" r="75%"><stop offset="0.55" stop-color="#000" stop-opacity="0"/>'
+            f'<stop offset="1" stop-color="#000" stop-opacity="{c["vignette"]}"/></radialGradient>')
+    photo = (f'<g id="photo" mask="url(#pm)" opacity="0.62">'
+             f'<image href="{href}" xlink:href="{href}" x="{px}" y="0" width="{pw}" height="{LH}" '
+             f'preserveAspectRatio="xMidYMid slice"/></g>')
+    lines = ["BUILT BY DISCIPLINE.", "GUIDED BY SCIENCE.", "BEYOND THE BARBELL"]
+    col = 2200
+    hs = fit("Anton", lines, col, 340)
+    cap, lh = cap_ratio("Anton") * hs, hs * 1.02
+    block = 70 + cap + lh * 2 + 170 + 110
+    y = (LH - block) / 2 - 40
+    out = [t("Inter700", LM, y, "THE MANIFESTO", 44, a, ls=16)]
+    y += 70 + cap
+    for i, line in enumerate(lines):
+        out.append(t("Anton", LM - 8, y, line, hs, a if i == 2 else ink))
+        y += lh
+    y -= lh
+    out.append(f'<line x1="{LM}" y1="{y + 110}" x2="{LM + 220}" y2="{y + 110}" stroke="{a}" stroke-width="6"/>')
+    out.append(t("PlayfairItalic", LM, y + 250, "Dr. Mohan Chetty, MBBS", 88, ink, opacity=0.9))
+    fy = LH - 260
+    head = (t("Inter700", LM, 230, "DOC BEYOND THE BARBELL", 44, a, ls=16)
+            + t("Inter500", LW - LM, 230, "MEDICINE · MUSCLE · MIND", 44, ink, ls=10, anchor="end", opacity=0.75))
+    foot = (f'<line x1="{LM}" y1="{fy}" x2="{LW - LM}" y2="{fy}" stroke="{a}" stroke-width="3" opacity="0.6"/>'
+            + t("Inter700", LM, fy + 130, HANDLE, 62, ink, ls=6) + logo(LW - LM, fy + 105, a))
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="420mm" height="297mm" viewBox="0 0 {LW} {LH}">
+<defs>
+<style>{FONT_CSS}</style>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0.09"/></feComponentTransfer></filter>
+{defs}
+</defs>
+<rect id="background" width="{LW}" height="{LH}" fill="{c['bg']}"/>
+{photo}
+<rect id="vignette" width="{LW}" height="{LH}" fill="url(#vigL)" pointer-events="none"/>
+<rect id="grain-layer" width="{LW}" height="{LH}" filter="url(#grain)" pointer-events="none"/>
+<g id="type">{"".join(out)}</g>
+<g id="header">{head}</g><g id="footer">{foot}</g>
+</svg>
+"""
+
+
 POSTERS = {
     "01-goggins": p01, "02-tyson": p02, "03-strength-is-medicine": p03, "04-bannister": p04,
     "05-form-over-comfort": p05, "06-bruce-lee": p06, "07-doctors-orders": p07,
+    "08-manifesto-landscape": p08,
 }
 
 if __name__ == "__main__":
