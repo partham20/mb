@@ -456,6 +456,55 @@ def p08():
 """
 
 
+def ig_manifesto():
+    """1080 x 1080 Instagram post version of the manifesto (poster 08)."""
+    S, SM = 1080, 60
+    c = THEMES["dark"]
+    a, ink = c["accent"], c["ink"]
+    href = "images/08-mohan.jpg"
+    px, pw = 300, S - 300
+    defs = (f'<linearGradient id="lf" gradientUnits="userSpaceOnUse" x1="{px}" y1="0" x2="{px + 300}" y2="0">'
+            '<stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+            '<linearGradient id="bf" gradientUnits="userSpaceOnUse" x1="0" y1="1000" x2="0" y2="560">'
+            '<stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+            f'<mask id="bm" maskUnits="userSpaceOnUse" x="0" y="0" width="{S}" height="{S}">'
+            f'<rect x="{px}" y="0" width="{pw}" height="{S}" fill="url(#bf)"/></mask>'
+            f'<mask id="pm" maskUnits="userSpaceOnUse" x="0" y="0" width="{S}" height="{S}">'
+            f'<rect x="{px}" y="0" width="{pw}" height="{S}" fill="url(#lf)" mask="url(#bm)"/></mask>'
+            '<radialGradient id="vigS" cx="50%" cy="45%" r="75%"><stop offset="0.55" stop-color="#000" stop-opacity="0"/>'
+            '<stop offset="1" stop-color="#000" stop-opacity="0.5"/></radialGradient>')
+    photo = (f'<g id="photo" mask="url(#pm)" opacity="0.7">'
+             f'<image href="{href}" xlink:href="{href}" x="{px}" y="0" width="{pw}" height="{S}" '
+             f'preserveAspectRatio="xMidYMin slice"/></g>')
+    lines = ["BUILT BY DISCIPLINE.", "GUIDED BY SCIENCE.", "BEYOND THE BARBELL"]
+    hs = fit("Anton", lines, S - 2 * SM, 112)
+    lh = hs * 1.02
+    last = 880
+    out = [logo(SM + 250, 360, a, scale=0.39),
+           t("Inter700", SM, 300, "THE MANIFESTO", 18, a, ls=6)]
+    for i, line in enumerate(lines):
+        out.append(t("Anton", SM - 3, last - lh * (2 - i), line, hs, a if i == 2 else ink))
+    out.append(f'<line x1="{SM}" y1="{last + 40}" x2="{SM + 90}" y2="{last + 40}" stroke="{a}" stroke-width="3"/>')
+    out.append(t("PlayfairItalic", SM, last + 95, "Dr. Mohan Chetty, MBBS", 34, ink, opacity=0.9))
+    head = (t("Inter700", SM, 78, "DOC BEYOND THE BARBELL", 17, a, ls=6)
+            + t("Inter500", S - SM, 78, "MEDICINE · MUSCLE · MIND", 17, ink, ls=4, anchor="end", opacity=0.75))
+    foot = t("Inter700", S - SM, last + 95, HANDLE, 22, ink, ls=2, anchor="end", opacity=0.85)
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{S}" height="{S}" viewBox="0 0 {S} {S}">
+<defs>
+<style>{FONT_CSS}</style>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0.06"/></feComponentTransfer></filter>
+{defs}
+</defs>
+<rect id="background" width="{S}" height="{S}" fill="{c['bg']}"/>
+{photo}
+<rect id="vignette" width="{S}" height="{S}" fill="url(#vigS)" pointer-events="none"/>
+<rect id="grain-layer" width="{S}" height="{S}" filter="url(#grain)" pointer-events="none"/>
+<g id="type">{"".join(out)}</g>
+<g id="header">{head}</g><g id="footer">{foot}</g>
+</svg>
+"""
+
+
 POSTERS = {
     "01-goggins": p01, "02-tyson": p02, "03-strength-is-medicine": p03, "04-bannister": p04,
     "05-form-over-comfort": p05, "06-bruce-lee": p06, "07-doctors-orders": p07,
@@ -466,3 +515,5 @@ if __name__ == "__main__":
     for name, fn in POSTERS.items():
         (HERE / f"{name}.svg").write_text(fn(), encoding="utf-8")
         print("wrote", f"{name}.svg")
+    (HERE / "ig-manifesto-square.svg").write_text(ig_manifesto(), encoding="utf-8")
+    print("wrote ig-manifesto-square.svg")
