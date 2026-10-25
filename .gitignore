@@ -3,3 +3,6 @@ posters/*.zip
 __pycache__/
 posters/images/08-mohan.jpg
 logo-*.zip
+video/out/
+video/intro-audio.wav
+video/assets/mohan-intro.jpg
