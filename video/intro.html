@@ -60,8 +60,7 @@ html, body { width: 1080px; height: 1920px; background: var(--bg); overflow: hid
   </div>
   <div id="eyebrow" class="abs inter gold" style="left:70px; top:1180px; font-size:26px; letter-spacing:10px">Meet your doc</div>
   <div id="name" class="abs serif ink clip" style="left:62px; top:1225px; font-size:118px; height:150px; width:1000px"><div>Dr. Mohan Chetty</div></div>
-  <div id="mbbs" class="abs anton gold" style="left:70px; top:1385px; font-size:64px; letter-spacing:4px">MBBS</div>
-  <div id="awards" class="abs inter ink" style="left:70px; top:1478px; font-size:24px; letter-spacing:5px; line-height:1.7; opacity:.9">
+  <div id="awards" class="abs inter ink" style="left:70px; top:1400px; font-size:24px; letter-spacing:5px; line-height:1.7; opacity:.9">
     <div><span class="gold">3rd</span> &nbsp;Mr. Tamil Nadu</div><div><span class="gold">1st</span> &nbsp;District-level champion</div>
   </div>
   <div id="k1" class="abs anton ink" style="left:66px; top:1230px; font-size:150px">Smart<br><span class="gold">training.</span></div>
@@ -148,10 +147,7 @@ window.setTime = function (t) {
   $('top3').style.opacity = easeOut(seg(t, 4.5, 4.9)) * (1 - pout);
   $('eyebrow').style.opacity = easeOut(seg(t, 4.7, 5.0)) * (1 - out3);
   reveal($('name'), seg(t, 4.85, 5.3), out3);
-  const mb = easeOut(seg(t, 5.1, 5.45));
-  $('mbbs').style.opacity = mb * (1 - out3);
-  $('mbbs').style.transform = `translateX(${(1 - mb) * -40}px)`;
-  const aw = easeOut(seg(t, 5.3, 5.7));
+  const aw = easeOut(seg(t, 5.15, 5.55));
   $('awards').style.opacity = .9 * aw * (1 - out3);
   $('awards').style.transform = `translateY(${(1 - aw) * 20}px)`;
   slam($('k1'), t, 6.1, 6.75);
